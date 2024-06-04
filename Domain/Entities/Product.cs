@@ -15,5 +15,7 @@ namespace Domain.Entities
         public int Stock { get; set; }
         public string Image { get; set; }
 
+        public ICollection<Cart>Carts { get; set; }
+
     }
 }

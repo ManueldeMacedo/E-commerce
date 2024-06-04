@@ -4,12 +4,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "Web\Web.csproj", "{51E9DB6A-E524-47BB-A38B-89E5864207CC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0FA399E9-2E8B-4DE5-AF2C-5419D6701E6C} = {0FA399E9-2E8B-4DE5-AF2C-5419D6701E6C}
+		{9D46F8C2-9800-40FC-A5DA-281EEC9993BF} = {9D46F8C2-9800-40FC-A5DA-281EEC9993BF}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{DAA47857-9441-4C7A-8FC3-F7B3A7FB374E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{9D46F8C2-9800-40FC-A5DA-281EEC9993BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{9D46F8C2-9800-40FC-A5DA-281EEC9993BF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DAA47857-9441-4C7A-8FC3-F7B3A7FB374E} = {DAA47857-9441-4C7A-8FC3-F7B3A7FB374E}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{0FA399E9-2E8B-4DE5-AF2C-5419D6701E6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{0FA399E9-2E8B-4DE5-AF2C-5419D6701E6C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9D46F8C2-9800-40FC-A5DA-281EEC9993BF} = {9D46F8C2-9800-40FC-A5DA-281EEC9993BF}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9CCA9664-2EBD-46BC-9A27-D6FA53E0FE7F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +48,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{51E9DB6A-E524-47BB-A38B-89E5864207CC} = {9CCA9664-2EBD-46BC-9A27-D6FA53E0FE7F}
+		{DAA47857-9441-4C7A-8FC3-F7B3A7FB374E} = {9CCA9664-2EBD-46BC-9A27-D6FA53E0FE7F}
+		{9D46F8C2-9800-40FC-A5DA-281EEC9993BF} = {9CCA9664-2EBD-46BC-9A27-D6FA53E0FE7F}
+		{0FA399E9-2E8B-4DE5-AF2C-5419D6701E6C} = {9CCA9664-2EBD-46BC-9A27-D6FA53E0FE7F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8BDFBD87-C4C6-4B4F-BF49-6A301F2F810D}

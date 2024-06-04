@@ -14,7 +14,7 @@ namespace Domain.Enum
         Debit,
 
     }
-    public enum User
+    public enum UserType
     {
         Admin,
         Client
