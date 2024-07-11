@@ -17,5 +17,13 @@ namespace Domain.Entities
 
         public ICollection<Cart>Carts { get; set; }
 
+        public Product(string Name, string Description, int Price, int Stock, string Image)
+        {
+            this.Name = Name;
+            this.Description = Description;
+            this.Price = Price;
+            this.Stock = Stock;
+            this.Image = Image;
+        }
     }
 }

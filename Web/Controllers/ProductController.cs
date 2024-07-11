@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Interfaces;
+using Application.Models;
+using Application.Services;
+using Microsoft.AspNetCore.Mvc;
 
 
 namespace Web.Controllers
@@ -7,6 +10,14 @@ namespace Web.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
+
+        private readonly IProductService _productService;
+
+        public ProductController(IProductService productService)
+        {
+            _productService = productService;
+        }
+
         // GET: api/<ProductController>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -23,8 +34,10 @@ namespace Web.Controllers
 
         // POST api/<ProductController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Route("Create")]
+        public void Post([FromBody] ProductDto productDto)
         {
+            _productService.CreateProduct(productDto);
         }
 
         // PUT api/<ProductController>/5
