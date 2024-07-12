@@ -29,7 +29,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ListProductsId");
 
-                    b.ToTable("CartProduct");
+                    b.ToTable("CartProduct", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Cart", b =>
@@ -57,7 +57,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Carts");
+                    b.ToTable("Carts", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Product", b =>
@@ -86,7 +86,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -122,7 +122,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("CartProduct", b =>

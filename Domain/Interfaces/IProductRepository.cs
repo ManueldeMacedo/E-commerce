@@ -1,14 +1,15 @@
 ﻿using Domain.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
     public interface IProductRepository
     {
-        public Product CreateProduct(Product productDto);
+        Task<Product> AddAsync(Product product);
+        Task<Product> GetByIdAsync(int id);
+        Task<IEnumerable<Product>> ListAsync();
+        Task UpdateAsync(Product product);
+        Task DeleteAsync(Product product);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
-using Application.Models;
+using Application.Models.Dtos;
+using Application.Models.Requests;
 using Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,7 +36,7 @@ namespace Web.Controllers
         // POST api/<ProductController>
         [HttpPost]
         [Route("Create")]
-        public void Post([FromBody] ProductDto productDto)
+        public void Post([FromBody] ProductCreateRequest productDto)
         {
             _productService.CreateProduct(productDto);
         }

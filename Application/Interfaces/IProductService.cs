@@ -1,14 +1,15 @@
-﻿using Application.Models;
-using System;
+﻿using Application.Models.Dtos;
+using Application.Models.Requests;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
     public interface IProductService
     {
-        public ProductDto CreateProduct(ProductDto prod);
+        ICollection<ProductDto> GetAllProducts();
+        ProductDto GetProductById(int id);
+        ProductDto CreateProduct(ProductCreateRequest dto);
+        void UpdateProduct(int id, ProductCreateRequest dto);
+        void DeleteProduct(int id);
     }
 }

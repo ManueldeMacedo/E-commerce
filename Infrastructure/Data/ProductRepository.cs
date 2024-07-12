@@ -1,25 +1,47 @@
-﻿using Application.Models;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Interfaces;
-using System;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Data
 {
     public class ProductRepository : EfRepository<Product>, IProductRepository
     {
+        private readonly ApplicationDbContext _context;
+
         public ProductRepository(ApplicationDbContext context) : base(context)
         {
+            _context = context;
         }
 
-        public Product CreateProduct(Product productDto)
+        public async Task<Product> AddAsync(Product product)
         {
-            _context.Add(productDto);
-            _context.SaveChanges();
-            return productDto;
+            await _context.AddAsync(product);
+            await _context.SaveChangesAsync();
+            return product;
+        }
+
+        public async Task<Product> GetByIdAsync(int id)
+        {
+            return await _context.Products.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<Product>> ListAsync()
+        {
+            return await _context.Products.ToListAsync();
+        }
+
+        public async Task UpdateAsync(Product product)
+        {
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Product product)
+        {
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
         }
     }
 }

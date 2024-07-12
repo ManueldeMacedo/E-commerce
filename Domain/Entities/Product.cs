@@ -11,13 +11,13 @@ namespace Domain.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int Price { get; set; }
+        public decimal Price { get; set; }
         public int Stock { get; set; }
         public string Image { get; set; }
 
         public ICollection<Cart>Carts { get; set; }
 
-        public Product(string Name, string Description, int Price, int Stock, string Image)
+        public Product(string Name, string Description, decimal Price, int Stock, string Image)
         {
             this.Name = Name;
             this.Description = Description;
