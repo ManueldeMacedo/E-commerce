@@ -1,10 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Models.Dtos;
 using Application.Models.Requests;
-using Domain.Entities;
 using Domain.Interfaces;
-using System;
-using System.Collections.Generic;
 
 namespace Application.Services
 {

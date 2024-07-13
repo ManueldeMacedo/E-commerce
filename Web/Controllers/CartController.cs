@@ -1,10 +1,7 @@
 ﻿using Application.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using Application.Services;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Application.Models.Dtos;
-using Application.Models.Responses;
 using Application.Models.Requests;
+using Application.Models.Responses;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {

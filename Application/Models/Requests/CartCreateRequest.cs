@@ -1,9 +1,7 @@
 ﻿using Application.Models.Dtos;
 using Domain.Entities;
 using Domain.Enum;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace Application.Models.Requests
 {

@@ -1,6 +1,5 @@
 using Application.Interfaces;
 using Application.Services;
-using Azure;
 using Domain.Entities;
 using Domain.Interfaces;
 using Infrastructure.Data;

@@ -1,6 +1,5 @@
 ﻿using Application.Models.Dtos;
 using Application.Models.Requests;
-using System.Collections.Generic;
 
 namespace Application.Interfaces
 {
