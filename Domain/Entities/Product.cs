@@ -30,13 +30,13 @@ namespace Domain.Entities
 
         public ICollection<Cart>Carts { get; set; }
 
-        public Product(string Name, string Description, decimal Price, int Stock, string Image)
+        public Product(string name, string description, decimal price, int stock, string image)
         {
-            this.Name = Name;
-            this.Description = Description;
-            this.Price = Price;
-            this.Stock = Stock;
-            this.Image = Image;
+            Name = name;
+            Description = description;
+            Price = price;
+            Stock = stock;
+            Image = image;
         }
     }
 }
