@@ -19,38 +19,64 @@ namespace Web.Controllers
             _productService = productService;
         }
 
-        // GET: api/<ProductController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<IEnumerable<ProductDto>> GetAllProducts()
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                var products = _productService.GetAllProducts();
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // GET api/<ProductController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ActionResult<ProductDto> GetProductById(int id)
         {
-            return "value";
+            try
+            {
+                var product = _productService.GetProductById(id);
+                if (product == null)
+                {
+                    return NotFound();
+                }
+                return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // POST api/<ProductController>
         [HttpPost]
-        [Route("Create")]
-        public void Post([FromBody] ProductCreateRequest productDto)
+        public ActionResult<ProductDto> CreateProduct([FromBody] ProductCreateRequest productDto)
         {
-            _productService.CreateProduct(productDto);
+            try
+            {
+                var createdProduct = _productService.CreateProduct(productDto);
+                return Ok(createdProduct);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // PUT api/<ProductController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void UpdateProduct(int id, [FromBody] ProductCreateRequest productDto)
         {
+                 _productService.UpdateProduct(id, productDto);
+                NoContent();
         }
 
-        // DELETE api/<ProductController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void DeleteProduct(int id)
         {
+                _productService.DeleteProduct(id);
+                NoContent();
         }
     }
 }
