@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+﻿using Application.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Application.Services;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Application.Models.Dtos;
+using Application.Models.Responses;
+using Application.Models.Requests;
 
 namespace Web.Controllers
 {
@@ -8,36 +12,71 @@ namespace Web.Controllers
     [ApiController]
     public class CartController : ControllerBase
     {
-        // GET: api/<CartController>
+        private readonly ICartService _cartService;
+
+        public CartController(ICartService cartService)
+        {
+            _cartService = cartService;
+        }
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<IEnumerable<CartResponse>> GetAllCarts()
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                var carts = _cartService.GetAllCarts();
+                return Ok(carts);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // GET api/<CartController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public ActionResult<CartResponse> GetCartById(int id)
         {
-            return "value";
+            try
+            {
+                var cart = _cartService.GetCartById(id);
+                if (cart == null)
+                {
+                    return NotFound();
+                }
+                return Ok(cart);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // POST api/<CartController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult<CartResponse> CreateCart([FromBody] CartCreateRequest cartDto)
         {
+            try
+            {
+                var createdCart = _cartService.CreateCart(cartDto);
+                return Ok(createdCart);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // PUT api/<CartController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void UpdateCart(int id, [FromBody] CartCreateRequest cartDto)
         {
+            _cartService.UpdateCart(id, cartDto);
+            NoContent();
         }
 
-        // DELETE api/<CartController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void DeleteCart(int id)
         {
+            _cartService.DeleteCart(id);
+            NoContent();
         }
     }
 }

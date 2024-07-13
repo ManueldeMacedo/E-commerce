@@ -1,5 +1,7 @@
 using Application.Interfaces;
 using Application.Services;
+using Azure;
+using Domain.Entities;
 using Domain.Interfaces;
 using Infrastructure.Data;
 using Microsoft.Data.Sqlite;
@@ -15,8 +17,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IRepositoryBase<Cart>, EfRepository<Cart>>();
 
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICartService, CartService>();
 
 string connectionString = builder.Configuration["ConnectionStrings:ECommerceDBConnectionString"]!;
 

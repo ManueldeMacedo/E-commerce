@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Enum;
 
 namespace Domain.Entities
@@ -11,14 +8,40 @@ namespace Domain.Entities
     public class Cart
     {
         [Key]
-        public int Id {  get; set; }
-        public User? User { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+
+        [Required]
+        [Column(TypeName = "int")]
+        public int UserId { get; set; }
+
+        [Required]
+        [Column(TypeName = "int")]
         public int Order { get; set; }
+
+        [Required]
+        [Column(TypeName = "int")]
         public int AmountProduct { get; set; }
-        public ICollection<Product>? ListProducts { get; set; }
+
+        [Required]
+        [Column(TypeName = "float")]
         public double TotalPrice { get; set; }
-        public TypePayment typePayment { get; set; }
 
+        public User User { get; set; }
+        public TypePayment TypePayment { get; set; }
+
+        public ICollection<CartProduct> CartProducts { get; set; } = new List<CartProduct>();
+
+        public Cart() { }
+
+        public Cart(int userId, int order, int amountProduct, ICollection<CartProduct> cartProducts, double totalPrice, TypePayment typePayment)
+        {
+            UserId = userId;
+            Order = order;
+            AmountProduct = amountProduct;
+            CartProducts = cartProducts;
+            TotalPrice = totalPrice;
+            TypePayment = typePayment;
+        }
     }
-
 }
