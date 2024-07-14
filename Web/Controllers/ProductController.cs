@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
-using Application.Models.Dtos;
 using Application.Models.Requests;
+using Application.Models.Responses;
+using Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -19,7 +20,7 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<ProductDto>> GetAllProducts()
+        public ActionResult<IEnumerable<ProductResponse>> GetAllProducts()
         {
             try
             {
@@ -33,7 +34,7 @@ namespace Web.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ProductDto> GetProductById(int id)
+        public ActionResult<ProductResponse> GetProductById(int id)
         {
             try
             {
@@ -51,7 +52,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult<ProductDto> CreateProduct([FromBody] ProductCreateRequest productDto)
+        public ActionResult<ProductResponse> CreateProduct([FromBody] ProductCreateRequest productDto)
         {
             try
             {

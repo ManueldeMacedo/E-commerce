@@ -1,42 +1,85 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Interfaces;
+using Application.Models.Requests;
+using Application.Models.Responses;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 
-
-namespace Web.Controllers
+[Route("api/[controller]")]
+[ApiController]
+public class UserController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UserController : ControllerBase
+    private readonly IUserService _userService;
+
+    public UserController(IUserService userService)
     {
-        // GET: api/<UserController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        _userService = userService;
+    }
 
-        // GET api/<UserController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+    [HttpGet]
+    public ActionResult<ICollection<UserResponse>> GetAllUsers()
+    {
+        try
         {
-            return "value";
+            return Ok(_userService.GetAllUsers());
         }
-
-        // POST api/<UserController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        catch (Exception ex)
         {
+            return BadRequest(ex.Message);
         }
+    }
 
-        // PUT api/<UserController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+    [HttpGet("{id}")]
+    public ActionResult<UserResponse> GetById([FromRoute] int id)
+    {
+        try
         {
+            return Ok(_userService.GetUserById(id));
         }
-
-        // DELETE api/<UserController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        catch (Exception ex)
         {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost]
+    public ActionResult<UserResponse> CreateUser([FromBody] UserCreateRequest user)
+    {
+        try
+        {
+            return Ok(_userService.CreateUser(user));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPut("{id}")]
+    public IActionResult UpdateUser([FromRoute] int id, [FromBody] UserCreateRequest user)
+    {
+        try
+        {
+            _userService.UpdateUser(id, user);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult DeleteUser([FromRoute] int id)
+    {
+        try
+        {
+            _userService.DeleteUser(id);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
 }

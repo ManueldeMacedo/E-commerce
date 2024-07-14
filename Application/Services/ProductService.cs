@@ -1,7 +1,10 @@
 ﻿using Application.Interfaces;
-using Application.Models.Dtos;
 using Application.Models.Requests;
+using Application.Models.Responses;
+using Domain.Entities;
 using Domain.Interfaces;
+using System;
+using System.Collections.Generic;
 
 namespace Application.Services
 {
@@ -14,23 +17,23 @@ namespace Application.Services
             _productRepository = productRepository;
         }
 
-        public ICollection<ProductDto> GetAllProducts()
+        public ICollection<ProductResponse> GetAllProducts()
         {
             var products = _productRepository.ListAsync().Result ?? throw new Exception("No se encontraron productos");
-            return ProductDto.ToList(products);
+            return ProductResponse.ToList(products);
         }
 
-        public ProductDto GetProductById(int id)
+        public ProductResponse GetProductById(int id)
         {
             var product = _productRepository.GetByIdAsync(id).Result ?? throw new Exception("No se encontró el producto");
-            return ProductDto.ToDto(product);
+            return ProductResponse.ToDto(product);
         }
 
-        public ProductDto CreateProduct(ProductCreateRequest dto)
+        public ProductResponse CreateProduct(ProductCreateRequest dto)
         {
             var productEntity = ProductCreateRequest.ToEntity(dto);
             var product = _productRepository.AddAsync(productEntity).Result;
-            return ProductDto.ToDto(product);
+            return ProductResponse.ToDto(product);
         }
 
         public void UpdateProduct(int id, ProductCreateRequest dto)
@@ -50,7 +53,7 @@ namespace Application.Services
             _productRepository.DeleteAsync(product).Wait();
         }
 
-        public ProductDto CreateProduct(ProductDto prod)
+        public ProductResponse CreateProduct(ProductResponse prod)
         {
             throw new NotImplementedException();
         }

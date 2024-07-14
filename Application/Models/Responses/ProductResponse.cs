@@ -1,8 +1,8 @@
 ﻿using Domain.Entities;
 
-namespace Application.Models.Dtos
+namespace Application.Models.Responses
 {
-    public class ProductDto
+    public class ProductResponse
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -11,9 +11,9 @@ namespace Application.Models.Dtos
         public int Stock { get; set; }
         public string Image { get; set; }
 
-        public static ProductDto ToDto(Product product)
+        public static ProductResponse ToDto(Product product)
         {
-            return new ProductDto
+            return new ProductResponse
             {
                 Id = product.Id,
                 Name = product.Name,
@@ -24,14 +24,14 @@ namespace Application.Models.Dtos
             };
         }
 
-        public static Product ToEntity(ProductDto dto)
+        public static Product ToEntity(ProductResponse dto)
         {
             return new Product(dto.Name, dto.Description, dto.Price, dto.Stock, dto.Image);
         }
 
-        public static List<ProductDto> ToList(IEnumerable<Product> products)
+        public static List<ProductResponse> ToList(IEnumerable<Product> products)
         {
-            var listProductDto = new List<ProductDto>();
+            var listProductDto = new List<ProductResponse>();
             foreach (var product in products)
             {
                 listProductDto.Add(ToDto(product));
