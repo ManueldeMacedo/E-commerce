@@ -8,17 +8,19 @@ namespace Application.Services
 {
     public class CartService : ICartService
     {
-        private readonly IRepositoryBase<Cart> _cartRepository;
+        private readonly IRepositoryBase<Cart> _baseRepository;
+        private readonly ICartRepository _cartRepository;
 
-        public CartService(IRepositoryBase<Cart> repositoryBase)
+        public CartService(IRepositoryBase<Cart> repositoryBase, ICartRepository cartRepository2)
         {
-            _cartRepository = repositoryBase;
+            _baseRepository = repositoryBase;
+            _cartRepository = cartRepository2;
         }
 
         public ICollection<CartResponse> GetAllCarts()
         {
             var carts = _cartRepository.ListAsync().Result ?? throw new Exception("No se encontraron carritos");
-            return CartResponse.ToList(carts);
+            return CartResponse.ToDtoList(carts);
         }
 
         public CartResponse GetCartById(int id)
@@ -30,7 +32,7 @@ namespace Application.Services
         public CartResponse CreateCart(CartCreateRequest dto)
         {
             var cartEntity = CartCreateRequest.ToEntity(dto);
-            var cart = _cartRepository.AddAsync(cartEntity).Result;
+            var cart = _baseRepository.AddAsync(cartEntity).Result;
             return CartResponse.ToDto(cart);
         }
 
@@ -43,13 +45,13 @@ namespace Application.Services
             cart.CartProducts = dto.CartListParser(dto.Products);
             cart.TotalPrice = dto.TotalPrice;
             cart.TypePayment = dto.TypePayment;
-            _cartRepository.UpdateAsync(cart).Wait();
+            _baseRepository.UpdateAsync(cart).Wait();
         }
 
         public void DeleteCart(int id)
         {
-            var cart = _cartRepository.GetByIdAsync(id).Result ?? throw new Exception("No se encontró el carrito");
-            _cartRepository.DeleteAsync(cart).Wait();
+            var cart = _baseRepository.GetByIdAsync(id).Result ?? throw new Exception("No se encontró el carrito");
+            _baseRepository.DeleteAsync(cart).Wait();
         }
     }
 }

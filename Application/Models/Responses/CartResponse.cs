@@ -12,7 +12,7 @@ namespace Application.Models.Responses
         public int AmountProduct { get; set; }
         public ICollection<CartProductDto>? Products { get; set; }
         public double TotalPrice { get; set; }
-        public TypePayment typePayment { get; set; }
+        public TypePayment TypePayment { get; set; }
 
         public static CartResponse ToDto(Cart cart)
         {
@@ -24,21 +24,25 @@ namespace Application.Models.Responses
                 AmountProduct = cart.AmountProduct,
                 Products = CartProductListParser(cart.CartProducts),
                 TotalPrice = cart.TotalPrice,
-                typePayment = cart.TypePayment
+                TypePayment = cart.TypePayment
             };
         }
 
-        public static List<CartResponse> ToList(IEnumerable<Cart> carts)
+        public static ICollection<CartResponse> ToDtoList(IEnumerable<Cart> carts)
         {
-            var listCartResponse = new List<CartResponse>();
-            foreach (var cart in carts)
+            return carts.Select(cart => new CartResponse
             {
-                listCartResponse.Add(ToDto(cart));
-            }
-            return listCartResponse;
+                Id = cart.Id,
+                UserId = cart.UserId,
+                Order = cart.Order,
+                AmountProduct = cart.AmountProduct,
+                Products = CartProductListParser(cart.CartProducts),
+                TotalPrice = cart.TotalPrice,
+                TypePayment = cart.TypePayment
+            }).ToList();
         }
 
-        public static ICollection<CartProductDto> CartProductListParser(ICollection<CartProduct> Products)
+        private static List<CartProductDto> CartProductListParser(ICollection<CartProduct> Products)
         {
             var cartProductsDto = Products.Select(p => new CartProductDto
             {
