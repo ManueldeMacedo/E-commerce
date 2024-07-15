@@ -5,6 +5,7 @@ using Domain.Entities;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Application.Services
 {
@@ -31,32 +32,39 @@ namespace Application.Services
 
         public ProductResponse CreateProduct(ProductCreateRequest dto)
         {
-            var productEntity = ProductCreateRequest.ToEntity(dto);
-            var product = _productRepository.AddAsync(productEntity).Result;
+            var product = _productRepository.AddAsync(ProductCreateRequest.ToEntity(dto)).Result;
             return ProductResponse.ToDto(product);
         }
 
         public void UpdateProduct(int id, ProductCreateRequest dto)
         {
             var product = _productRepository.GetByIdAsync(id).Result ?? throw new Exception("No se encontró el producto");
-            product.Name = dto.Name;
-            product.Price = dto.Price;
-            product.Description = dto.Description;
-            product.Stock = dto.Stock;
-            product.Image = dto.Image;
-            _productRepository.UpdateAsync(product).Wait();
+            _productRepository.UpdateAsync(ProductCreateRequest.ToEntity(dto));
         }
 
         public void DeleteProduct(int id)
         {
             var product = _productRepository.GetByIdAsync(id).Result ?? throw new Exception("No se encontró el producto");
-            _productRepository.DeleteAsync(product).Wait();
+            _productRepository.DeleteAsync(product);
         }
 
-        public ProductResponse CreateProduct(ProductResponse prod)
+        public bool IsProductInStock(int id)
         {
-            throw new NotImplementedException();
+            var product = _productRepository.GetByIdAsync(id).Result ?? throw new Exception("No se encontró el producto");
+            return product.Stock > 0;
+        }
+
+        public IEnumerable<ProductResponse> SearchProductsByName(string searchTerm)
+        {
+            var products = _productRepository.ListAsync().Result;
+
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                return products.Select(ProductResponse.ToDto);
+            }
+
+            searchTerm = searchTerm.ToLower();
+            return products.Where(p => p.Name.ToLower().Contains(searchTerm)).Select(ProductResponse.ToDto);
         }
     }
 }
-

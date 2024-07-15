@@ -11,5 +11,7 @@ namespace Application.Interfaces
         ProductResponse CreateProduct(ProductCreateRequest dto);
         void UpdateProduct(int id, ProductCreateRequest dto);
         void DeleteProduct(int id);
+        bool IsProductInStock(int id);
+        IEnumerable<ProductResponse> SearchProductsByName(string searchTerm);
     }
 }
