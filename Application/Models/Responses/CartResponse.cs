@@ -1,6 +1,8 @@
 ﻿using Application.Models.Dtos;
 using Domain.Entities;
 using Domain.Enum;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Application.Models.Responses
 {
@@ -10,7 +12,7 @@ namespace Application.Models.Responses
         public int UserId { get; set; }
         public int Order { get; set; }
         public int AmountProduct { get; set; }
-        public ICollection<CartProductDto>? Products { get; set; }
+        public ICollection<CartProductDto> Products { get; set; } = new List<CartProductDto>();
         public double TotalPrice { get; set; }
         public TypePayment TypePayment { get; set; }
 
@@ -22,7 +24,7 @@ namespace Application.Models.Responses
                 UserId = cart.UserId,
                 Order = cart.Order,
                 AmountProduct = cart.AmountProduct,
-                Products = CartProductListParser(cart.CartProducts),
+                Products = CartProductListParser(cart.CartProducts ?? new List<CartProduct>()),
                 TotalPrice = cart.TotalPrice,
                 TypePayment = cart.TypePayment
             };
@@ -36,7 +38,7 @@ namespace Application.Models.Responses
                 UserId = cart.UserId,
                 Order = cart.Order,
                 AmountProduct = cart.AmountProduct,
-                Products = CartProductListParser(cart.CartProducts),
+                Products = CartProductListParser(cart.CartProducts ?? new List<CartProduct>()),
                 TotalPrice = cart.TotalPrice,
                 TypePayment = cart.TypePayment
             }).ToList();
@@ -44,13 +46,11 @@ namespace Application.Models.Responses
 
         private static List<CartProductDto> CartProductListParser(ICollection<CartProduct> Products)
         {
-            var cartProductsDto = Products.Select(p => new CartProductDto
+            return Products.Select(p => new CartProductDto
             {
                 ProductId = p.ProductId,
                 Quantity = p.Quantity
             }).ToList();
-
-            return cartProductsDto;
         }
     }
 }

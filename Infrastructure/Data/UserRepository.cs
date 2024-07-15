@@ -30,12 +30,20 @@ namespace Infrastructure.Data
 
         public async Task<User> GetByIdAsync(int id)
         {
-            return await _context.Users.FindAsync(id);
+            return await _context.Users
+                .Include(u => u.Carts) // Incluye los carritos
+                .ThenInclude(c => c.CartProducts)
+                .ThenInclude(cp => cp.Product)
+                .FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<List<User>> ListAsync()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users
+                .Include(u => u.Carts) // Include the related Carts
+                .ThenInclude(c => c.CartProducts)
+                .ThenInclude(cp => cp.Product)
+                .ToListAsync();
         }
 
         public async Task UpdateAsync(User user)

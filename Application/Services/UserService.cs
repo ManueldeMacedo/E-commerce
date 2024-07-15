@@ -5,6 +5,8 @@ using Domain.Entities;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Application.Services
 {
@@ -19,14 +21,14 @@ namespace Application.Services
 
         public ICollection<UserResponse> GetAllUsers()
         {
-            var users = UserResponse.ToList(_userRepository.ListAsync().Result ?? throw new Exception("No se encontraron usuarios"));
+            var users = UserResponse.ToDtoList(_userRepository.ListAsync().Result ?? throw new Exception("No se encontraron usuarios"));
             return users;
         }
 
         public UserResponse GetUserById(int id)
         {
-            UserResponse userResponse = UserResponse.ToDto(_userRepository.GetByIdAsync(id).Result ?? throw new Exception("No se encontró el usuario"));
-            return userResponse;
+            UserResponse userDto = UserResponse.ToDto(_userRepository.GetByIdAsync(id).Result ?? throw new Exception("No se encontró el usuario"));
+            return userDto;
         }
 
         public UserResponse CreateUser(UserCreateRequest dto)
@@ -36,15 +38,7 @@ namespace Application.Services
 
         public void UpdateUser(int id, UserCreateRequest userDto)
         {
-            var user = _userRepository.GetByIdAsync(id).Result ?? throw new Exception("No se encontró el usuario");
-            user.Name = userDto.Name;
-            user.Email = userDto.Email;
-            user.Password = userDto.Password;
-            user.UserName = userDto.UserName;
-            user.UserType = userDto.UserType;
-            user.UserRegistrationDate = userDto.UserRegistrationDate;
-            user.UserDeletionDate = userDto.UserDeletionDate;
-            _userRepository.UpdateAsync(user);
+            _userRepository.UpdateAsync(UserCreateRequest.ToEntity(userDto));
         }
 
         public void DeleteUser(int id)

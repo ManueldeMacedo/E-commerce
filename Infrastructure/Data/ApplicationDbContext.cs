@@ -9,11 +9,19 @@ namespace Infrastructure.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<User> Users { get; set; }
 
-        //Acá estamos llamando al constructor de DbContext que es el que acepta las opciones
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) 
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Configuración de la relación entre User y Cart
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Carts)
+                .WithOne(c => c.User)
+                .HasForeignKey(c => c.UserId);
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

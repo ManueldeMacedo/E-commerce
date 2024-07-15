@@ -3,7 +3,6 @@ using Application.Models.Requests;
 using Application.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -56,30 +55,14 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult UpdateUser([FromRoute] int id, [FromBody] UserCreateRequest user)
+    public void UpdateUser([FromRoute] int id, [FromBody] UserCreateRequest user)
     {
-        try
-        {
-            _userService.UpdateUser(id, user);
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        _userService.UpdateUser(id, user);
     }
 
     [HttpDelete("{id}")]
-    public IActionResult DeleteUser([FromRoute] int id)
+    public void DeleteUser([FromRoute] int id)
     {
-        try
-        {
-            _userService.DeleteUser(id);
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        _userService.DeleteUser(id);
     }
 }
