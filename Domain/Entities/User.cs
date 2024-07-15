@@ -1,6 +1,8 @@
-﻿using Domain.Enum;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System;
+using Domain.Enums;
+
 
 namespace Domain.Entities
 {
@@ -40,5 +42,14 @@ namespace Domain.Entities
         public DateTime UserDeletionDate { get; set; }
 
         public ICollection<Cart>Carts { get; set; }
+
+
+        public static bool CompareUserType(User user, string userTypeString)
+        {
+            if (Enum.TryParse<UserType>(userTypeString, out var userTypeEnum))
+                return user.UserType == userTypeEnum;
+
+            return false;
+        }
     }
 }

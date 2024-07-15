@@ -1,5 +1,5 @@
 ﻿using Domain.Entities;
-using Domain.Enum;
+using Domain.Enums;
 using System.Collections.Generic;
 
 namespace Application.Models.Responses

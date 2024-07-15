@@ -51,5 +51,10 @@ namespace Infrastructure.Data
             _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
+
+        public User? GetUserByUserName(string userName)
+        {
+            return _context.Users.SingleOrDefault(p => p.UserName == userName);
+        }
     }
 }

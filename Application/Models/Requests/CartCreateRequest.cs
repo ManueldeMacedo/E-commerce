@@ -1,6 +1,6 @@
 ﻿using Application.Models.Dtos;
 using Domain.Entities;
-using Domain.Enum;
+using Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace Application.Models.Requests

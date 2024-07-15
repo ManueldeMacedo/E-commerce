@@ -1,4 +1,4 @@
-﻿namespace Domain.Enum
+﻿namespace Domain.Enums
 {
     public enum TypePayment
     {
@@ -12,5 +12,5 @@
         Admin,
         Client
     }
-     
+
 }
