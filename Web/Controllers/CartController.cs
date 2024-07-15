@@ -1,12 +1,15 @@
 ﻿using Application.Interfaces;
 using Application.Models.Requests;
 using Application.Models.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CartController : ControllerBase
     {
         private readonly ICartService _cartService;
@@ -21,6 +24,16 @@ namespace Web.Controllers
         {
             try
             {
+                var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadToken(token) as JwtSecurityToken;
+                var role = jwtToken?.Claims.FirstOrDefault(claim => claim.Type == "role")?.Value;
+
+                if (role != "Admin")
+                {
+                    return Unauthorized("You do not have access to this resource.");
+                }
+
                 var carts = _cartService.GetAllCarts();
                 return Ok(carts);
             }

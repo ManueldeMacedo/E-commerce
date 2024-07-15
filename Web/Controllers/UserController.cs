@@ -1,11 +1,13 @@
 ﻿using Application.Interfaces;
 using Application.Models.Requests;
 using Application.Models.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using System.IdentityModel.Tokens.Jwt;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -20,6 +22,16 @@ public class UserController : ControllerBase
     {
         try
         {
+            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadToken(token) as JwtSecurityToken;
+            var role = jwtToken?.Claims.FirstOrDefault(claim => claim.Type == "role")?.Value;
+
+            if (role != "Admin")
+            {
+                return Unauthorized("You do not have access to this resource.");
+            }
+
             return Ok(_userService.GetAllUsers());
         }
         catch (Exception ex)

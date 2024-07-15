@@ -30,7 +30,7 @@ namespace Infrastructure.Services
 
             if (user == null) return null;
 
-            if (authenticationRequest.UserType == user.Name)
+            if (authenticationRequest.UserName == user.UserName)
                 if (User.CompareUserType(user, authenticationRequest.UserType) && user.Password == authenticationRequest.Password) return user;
 
             return null;
