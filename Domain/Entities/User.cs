@@ -37,9 +37,8 @@ namespace Domain.Entities
         [Column(TypeName = "datetime")]
         public DateTime UserRegistrationDate { get; set; }
 
-        [Required]
         [Column(TypeName = "datetime")]
-        public DateTime UserDeletionDate { get; set; }
+        public DateTime? UserDeletionDate { get; set; }
 
         public ICollection<Cart>Carts { get; set; }
 

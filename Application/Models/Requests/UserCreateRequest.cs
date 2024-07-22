@@ -23,12 +23,6 @@ namespace Application.Models.Requests
         [Required]
         public UserType UserType { get; set; }
 
-        [Required]
-        public DateTime UserRegistrationDate { get; set; }
-
-        [Required]
-        public DateTime UserDeletionDate { get; set; }
-
         public static User ToEntity(UserCreateRequest dto)
         {
             return new User
@@ -38,8 +32,8 @@ namespace Application.Models.Requests
                 Password = dto.Password,
                 UserName = dto.UserName,
                 UserType = dto.UserType,
-                UserRegistrationDate = dto.UserRegistrationDate,
-                UserDeletionDate = dto.UserDeletionDate
+                UserRegistrationDate = DateTime.Now,
+                UserDeletionDate = null
             };
         }
     }

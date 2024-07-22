@@ -12,7 +12,7 @@ namespace Application.Models.Responses
         public string UserName { get; set; }
         public UserType UserType { get; set; }
         public DateTime UserRegistrationDate { get; set; }
-        public DateTime UserDeletionDate { get; set; }
+        public DateTime? UserDeletionDate { get; set; }
         public ICollection<CartResponse> Carts { get; set; } = new List<CartResponse>();
 
         public static UserResponse ToDto(User user)
