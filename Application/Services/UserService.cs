@@ -31,6 +31,11 @@ namespace Application.Services
             return userDto;
         }
 
+        public User? GetUserByUserName(string userName)
+        {
+            return _userRepository.GetUserByUserName(userName);
+        }
+
         public UserResponse CreateUser(UserCreateRequest dto)
         {
             return UserResponse.ToDto(_userRepository.AddAsync(UserCreateRequest.ToEntity(dto)).Result);
@@ -40,6 +45,9 @@ namespace Application.Services
         {
 
             var existingUser = _userRepository.GetByIdAsync(id).Result ?? throw new KeyNotFoundException("No se encontró el usuario");
+
+            if (_userRepository.GetUserByUserName(dto.UserName)!=null)
+                throw new InvalidOperationException("El nombre de usuario ya está en uso.");
 
             existingUser.Name = dto.Name;
             existingUser.Email = dto.Email;

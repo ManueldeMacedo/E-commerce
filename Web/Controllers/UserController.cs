@@ -71,6 +71,11 @@ public class UserController : ControllerBase
                 return BadRequest("La solicitud no es válida." +
                     " Verifica que todos los campos requeridos estén presentes y contengan valores adecuados.");
 
+            var existingUser = _userService.GetUserByUserName(user.UserName);
+
+            if (existingUser != null)
+                return BadRequest("El usuario ya existe.");
+
             return Ok(_userService.CreateUser(user));
         }
         catch (Exception ex)
@@ -96,6 +101,10 @@ public class UserController : ControllerBase
         catch (KeyNotFoundException ex)
         {
             return NotFound(ex.Message);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
         }
         catch (Exception ex)
         {
