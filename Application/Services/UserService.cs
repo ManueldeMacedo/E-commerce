@@ -21,13 +21,13 @@ namespace Application.Services
 
         public ICollection<UserResponse> GetAllUsers()
         {
-            var users = UserResponse.ToDtoList(_userRepository.ListAsync().Result ?? throw new Exception("No se encontraron usuarios"));
+            var users = UserResponse.ToDtoList(_userRepository.ListAsync().Result ?? throw new KeyNotFoundException("No se encontraron usuarios"));
             return users;
         }
 
         public UserResponse GetUserById(int id)
         {
-            UserResponse userDto = UserResponse.ToDto(_userRepository.GetByIdAsync(id).Result ?? throw new Exception("No se encontró el usuario"));
+            UserResponse userDto = UserResponse.ToDto(_userRepository.GetByIdAsync(id).Result ?? throw new KeyNotFoundException("No se encontró el usuario"));
             return userDto;
         }
 
@@ -43,7 +43,7 @@ namespace Application.Services
 
         public void DeleteUser(int id)
         {
-            var userDto = _userRepository.GetByIdAsync(id).Result ?? throw new Exception("No se encontró el usuario");
+            var userDto = _userRepository.GetByIdAsync(id).Result ?? throw new KeyNotFoundException("No se encontró el usuario");
             _userRepository.DeleteAsync(userDto);
         }
     }

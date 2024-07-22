@@ -3,12 +3,12 @@ using Application.Models.Requests;
 using Application.Models.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static Infrastructure.Services.AutenticacionService;
 
 namespace Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -26,9 +26,14 @@ namespace Web.Controllers
                 var products = _productService.GetAllProducts();
                 return Ok(products);
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Ha ocurrido un error inesperado. Error: " + ex.Message);
             }
         }
 
@@ -44,12 +49,18 @@ namespace Web.Controllers
                 }
                 return Ok(product);
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Ha ocurrido un error inesperado. Error: " + ex.Message);
             }
         }
 
+        [AuthorizeRoles("Admin")]
         [HttpPost]
         public ActionResult<ProductResponse> CreateProduct([FromBody] ProductCreateRequest productDto)
         {
@@ -58,12 +69,18 @@ namespace Web.Controllers
                 var createdProduct = _productService.CreateProduct(productDto);
                 return Ok(createdProduct);
             }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid("Acceso denegado. No tiene los permisos necesarios.");
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Ha ocurrido un error inesperado. Error: " + ex.Message);
             }
         }
 
+        [AuthorizeRoles("Admin", "Client")]
         [HttpPut("{id}")]
         public ActionResult UpdateProduct(int id, [FromBody] ProductCreateRequest productDto)
         {
@@ -72,12 +89,18 @@ namespace Web.Controllers
                 _productService.UpdateProduct(id, productDto);
                 return NoContent();
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Ha ocurrido un error inesperado. Error: " + ex.Message);
             }
         }
 
+        [AuthorizeRoles("Admin")]
         [HttpDelete("{id}")]
         public ActionResult DeleteProduct(int id)
         {
@@ -86,9 +109,18 @@ namespace Web.Controllers
                 _productService.DeleteProduct(id);
                 return NoContent();
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid("Acceso denegado. No tiene los permisos necesarios.");
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Ha ocurrido un error inesperado. Error: " + ex.Message);
             }
         }
 
@@ -109,9 +141,14 @@ namespace Web.Controllers
                     return Ok($"El producto '{product.Name}' se encuentra agotado.");
                 }
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Ha ocurrido un error inesperado. Error: " + ex.Message);
             }
         }
 
@@ -123,9 +160,14 @@ namespace Web.Controllers
                 var products = _productService.SearchProductsByName(searchTerm);
                 return Ok(products);
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Ha ocurrido un error inesperado. Error: " + ex.Message);
             }
         }
     }

@@ -51,5 +51,15 @@ namespace Domain.Entities
 
             return false;
         }
+
+        public static string ToUserTypeString(UserType userType)
+        {
+            switch (userType)
+            {
+                case UserType.Admin: return "Admin";
+                case UserType.Client: return "Client";
+                default: throw new ArgumentOutOfRangeException(nameof(userType), userType, null);
+            }
+        }
     }
 }

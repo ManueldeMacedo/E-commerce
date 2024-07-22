@@ -20,13 +20,13 @@ namespace Application.Services
 
         public ICollection<ProductResponse> GetAllProducts()
         {
-            var products = _productRepository.ListAsync().Result ?? throw new Exception("No se encontraron productos");
+            var products = _productRepository.ListAsync().Result ?? throw new KeyNotFoundException("No se encontraron productos");
             return ProductResponse.ToList(products);
         }
 
         public ProductResponse GetProductById(int id)
         {
-            var product = _productRepository.GetByIdAsync(id).Result ?? throw new Exception("No se encontró el producto");
+            var product = _productRepository.GetByIdAsync(id).Result ?? throw new KeyNotFoundException("No se encontró el producto");
             return ProductResponse.ToDto(product);
         }
 
@@ -38,25 +38,25 @@ namespace Application.Services
 
         public void UpdateProduct(int id, ProductCreateRequest dto)
         {
-            var product = _productRepository.GetByIdAsync(id).Result ?? throw new Exception("No se encontró el producto");
+            var product = _productRepository.GetByIdAsync(id).Result ?? throw new KeyNotFoundException("No se encontró el producto");
             _productRepository.UpdateAsync(ProductCreateRequest.ToEntity(dto));
         }
 
         public void DeleteProduct(int id)
         {
-            var product = _productRepository.GetByIdAsync(id).Result ?? throw new Exception("No se encontró el producto");
+            var product = _productRepository.GetByIdAsync(id).Result ?? throw new KeyNotFoundException("No se encontró el producto");
             _productRepository.DeleteAsync(product);
         }
 
         public bool IsProductInStock(int id)
         {
-            var product = _productRepository.GetByIdAsync(id).Result ?? throw new Exception("No se encontró el producto");
+            var product = _productRepository.GetByIdAsync(id).Result ?? throw new KeyNotFoundException("No se encontró el producto");
             return product.Stock > 0;
         }
 
         public IEnumerable<ProductResponse> SearchProductsByName(string searchTerm)
         {
-            var products = _productRepository.ListAsync().Result;
+            var products = _productRepository.ListAsync().Result ?? throw new KeyNotFoundException("No se encontraron productos");
 
             if (string.IsNullOrEmpty(searchTerm))
             {

@@ -55,6 +55,12 @@ builder.Services.AddAuthentication("Bearer") //"Bearer" es el tipo de auntentica
     }
 );
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("Client", policy => policy.RequireRole("Client"));
+});
+
 string connectionString = builder.Configuration["ConnectionStrings:ECommerceDBConnectionString"]!;
 
 var connection = new SqliteConnection(connectionString);

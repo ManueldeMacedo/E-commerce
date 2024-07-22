@@ -4,9 +4,11 @@ using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Infrastructure.Services
 {
@@ -30,8 +32,7 @@ namespace Infrastructure.Services
 
             if (user == null) return null;
 
-            if (authenticationRequest.UserName == user.UserName)
-                if (User.CompareUserType(user, authenticationRequest.UserType) && user.Password == authenticationRequest.Password) return user;
+            if (authenticationRequest.UserName == user.UserName && user.Password == authenticationRequest.Password) return user;
 
             return null;
         }
@@ -55,7 +56,7 @@ namespace Infrastructure.Services
             claimsForToken.Add(new Claim("sub", user.Id.ToString())); //"sub" es una key estándar que significa unique user identifier, es decir, si mandamos el id del usuario por convención lo hacemos con la key "sub".
             claimsForToken.Add(new Claim("given_name", user.Name)); //Lo mismo para given_name y family_name, son las convenciones para nombre y apellido. Ustedes pueden usar lo que quieran, pero si alguien que no conoce la app
             claimsForToken.Add(new Claim("email", user.Email)); //quiere usar la API por lo general lo que espera es que se estén usando estas keys.
-            claimsForToken.Add(new Claim("role", authenticationRequest.UserType)); //Debería venir del usuario
+            claimsForToken.Add(new Claim("role", User.ToUserTypeString(user.UserType))); //Debería venir del usuario
 
             var jwtSecurityToken = new JwtSecurityToken( //agregar using System.IdentityModel.Tokens.Jwt; Acá es donde se crea el token con toda la data que le pasamos antes.
               _options.Issuer,
@@ -79,6 +80,15 @@ namespace Infrastructure.Services
             public string Issuer { get; set; }
             public string Audience { get; set; }
             public string SecretForKey { get; set; }
+        }
+
+
+        public class AuthorizeRolesAttribute : AuthorizeAttribute
+        {
+            public AuthorizeRolesAttribute(params string[] roles) : base()
+            {
+                Roles = string.Join(",", roles);
+            }
         }
     }
 }

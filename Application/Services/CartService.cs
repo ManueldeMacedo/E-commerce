@@ -19,13 +19,13 @@ namespace Application.Services
 
         public ICollection<CartResponse> GetAllCarts()
         {
-            var carts = _cartRepository.ListAsync().Result ?? throw new Exception("No se encontraron carritos");
+            var carts = _cartRepository.ListAsync().Result ?? throw new KeyNotFoundException("No se encontraron carritos");
             return CartResponse.ToDtoList(carts);
         }
 
         public CartResponse GetCartById(int id)
         {
-            var cart = _cartRepository.GetByIdAsync(id).Result ?? throw new Exception("No se encontró el carrito");
+            var cart = _cartRepository.GetByIdAsync(id).Result ?? throw new KeyNotFoundException("No se encontró el carrito");
             return CartResponse.ToDto(cart);
         }
 
@@ -38,7 +38,7 @@ namespace Application.Services
 
         public void UpdateCart(int id, CartCreateRequest dto)
         {
-            var cart = _cartRepository.GetByIdAsync(id).Result ?? throw new Exception("No se encontró el carrito");
+            var cart = _cartRepository.GetByIdAsync(id).Result ?? throw new KeyNotFoundException("No se encontró el carrito");
             cart.UserId = dto.UserId;
             cart.Order = dto.Order;
             cart.AmountProduct = dto.AmountProduct;
@@ -50,7 +50,7 @@ namespace Application.Services
 
         public void DeleteCart(int id)
         {
-            var cart = _baseRepository.GetByIdAsync(id).Result ?? throw new Exception("No se encontró el carrito");
+            var cart = _baseRepository.GetByIdAsync(id).Result ?? throw new KeyNotFoundException("No se encontró el carrito");
             _baseRepository.DeleteAsync(cart).Wait();
         }
     }

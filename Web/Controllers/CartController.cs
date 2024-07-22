@@ -1,9 +1,12 @@
 ﻿using Application.Interfaces;
 using Application.Models.Requests;
 using Application.Models.Responses;
+using Application.Services;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
+using static Infrastructure.Services.AutenticacionService;
 
 namespace Web.Controllers
 {
@@ -19,30 +22,27 @@ namespace Web.Controllers
             _cartService = cartService;
         }
 
+        [AuthorizeRoles("Admin")]
         [HttpGet]
         public ActionResult<IEnumerable<CartResponse>> GetAllCarts()
         {
             try
             {
-                var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-                var handler = new JwtSecurityTokenHandler();
-                var jwtToken = handler.ReadToken(token) as JwtSecurityToken;
-                var role = jwtToken?.Claims.FirstOrDefault(claim => claim.Type == "role")?.Value;
-
-                if (role != "Admin")
-                {
-                    return Unauthorized("You do not have access to this resource.");
-                }
-
                 var carts = _cartService.GetAllCarts();
                 return Ok(carts);
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Ha ocurrido un error inesperado. Error: " + ex.Message);
             }
         }
 
+        [AuthorizeRoles("Admin", "Client")]
         [HttpGet("{id}")]
         public ActionResult<CartResponse> GetCartById(int id)
         {
@@ -55,12 +55,18 @@ namespace Web.Controllers
                 }
                 return Ok(cart);
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Ha ocurrido un error inesperado. Error: " + ex.Message);
             }
         }
 
+        [AuthorizeRoles("Admin", "Client")]
         [HttpPost]
         public ActionResult<CartResponse> CreateCart([FromBody] CartCreateRequest cartDto)
         {
@@ -71,22 +77,49 @@ namespace Web.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Ha ocurrido un error inesperado. Error: " + ex.Message);
             }
         }
 
+        [AuthorizeRoles("Admin", "Client")]
         [HttpPut("{id}")]
-        public void UpdateCart(int id, [FromBody] CartCreateRequest cartDto)
+        public IActionResult UpdateCart(int id, [FromBody] CartCreateRequest cartDto)
         {
-            _cartService.UpdateCart(id, cartDto);
-            NoContent();
+            try
+            {
+                _cartService.UpdateCart(id, cartDto);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Ha ocurrido un error inesperado. Error: " + ex.Message);
+            }
         }
 
+        [AuthorizeRoles("Admin", "Client")]
         [HttpDelete("{id}")]
-        public void DeleteCart(int id)
+        public IActionResult DeleteCart(int id)
         {
-            _cartService.DeleteCart(id);
-            NoContent();
+            try
+            {
+                _cartService.DeleteCart(id);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Ha ocurrido un error inesperado. Error: " + ex.Message);
+            }
         }
     }
 }
