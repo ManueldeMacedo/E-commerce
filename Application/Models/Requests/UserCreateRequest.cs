@@ -36,5 +36,16 @@ namespace Application.Models.Requests
                 UserDeletionDate = null
             };
         }
+
+        public static bool validateDto(UserCreateRequest dto)
+        {
+            if (dto.Name == default ||
+                dto.Email == default ||
+                dto.Password == default ||
+                dto.UserName == default)
+                return false;
+
+            return true;
+        }
     }
 }

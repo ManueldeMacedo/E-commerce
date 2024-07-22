@@ -67,6 +67,10 @@ public class UserController : ControllerBase
     {
         try
         {
+            if (!UserCreateRequest.validateDto(user))
+                return BadRequest("La solicitud no es válida." +
+                    " Verifica que todos los campos requeridos estén presentes y contengan valores adecuados.");
+
             return Ok(_userService.CreateUser(user));
         }
         catch (Exception ex)
@@ -82,6 +86,10 @@ public class UserController : ControllerBase
     {
         try
         {
+            if (!UserCreateRequest.validateDto(user))
+                return BadRequest("La solicitud no es válida." +
+                    " Verifica que todos los campos requeridos estén presentes y contengan valores adecuados.");
+
             _userService.UpdateUser(id, user);
             return NoContent();
         }
