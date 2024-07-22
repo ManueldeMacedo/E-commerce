@@ -66,6 +66,10 @@ namespace Web.Controllers
         {
             try
             {
+                if (!ProductCreateRequest.validateDto(productDto))
+                    return BadRequest("La solicitud no es válida." +
+                        " Verifica que todos los campos requeridos estén presentes y contengan valores adecuados.");
+
                 var createdProduct = _productService.CreateProduct(productDto);
                 return Ok(createdProduct);
             }
@@ -86,6 +90,10 @@ namespace Web.Controllers
         {
             try
             {
+                if (!ProductCreateRequest.validateDto(productDto))
+                    return BadRequest("La solicitud no es válida." +
+                        " Verifica que todos los campos requeridos estén presentes y contengan valores adecuados.");
+
                 _productService.UpdateProduct(id, productDto);
                 return NoContent();
             }
