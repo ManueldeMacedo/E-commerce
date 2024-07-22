@@ -42,5 +42,22 @@ namespace Application.Models.Requests
 
             return cartProducts;
         }
+
+        public static bool validateDto(CartCreateRequest dto)
+        {
+            if (dto.UserId == default ||
+                dto.Order == default ||
+                dto.AmountProduct == default ||
+                dto.TotalPrice == default)
+                return false;
+
+            if (dto.Products == null || dto.Products.Count == 0)
+                return false;
+
+            if (dto.Products.Any(p => p.ProductId == default || p.Quantity == default))
+                return false;
+
+            return true;
+        }
     }
 }

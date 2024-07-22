@@ -72,6 +72,10 @@ namespace Web.Controllers
         {
             try
             {
+                if (!CartCreateRequest.validateDto(cartDto))
+                    return BadRequest("La solicitud no es válida." +
+                        " Verifica que todos los campos requeridos estén presentes y contengan valores adecuados.");
+
                 var createdCart = _cartService.CreateCart(cartDto);
                 return Ok(createdCart);
             }
@@ -88,6 +92,10 @@ namespace Web.Controllers
         {
             try
             {
+                if (!CartCreateRequest.validateDto(cartDto))
+                    return BadRequest("La solicitud no es válida." +
+                        " Verifica que todos los campos requeridos estén presentes y contengan valores adecuados.");
+
                 _cartService.UpdateCart(id, cartDto);
                 return NoContent();
             }
