@@ -38,8 +38,15 @@ namespace Application.Services
 
         public void UpdateProduct(int id, ProductCreateRequest dto)
         {
-            var product = _productRepository.GetByIdAsync(id).Result ?? throw new KeyNotFoundException("No se encontró el producto");
-            _productRepository.UpdateAsync(ProductCreateRequest.ToEntity(dto));
+            var existingProduct = _productRepository.GetByIdAsync(id).Result ?? throw new KeyNotFoundException("No se encontró el producto");
+
+            existingProduct.Name = dto.Name;
+            existingProduct.Description = dto.Description;
+            existingProduct.Price = dto.Price;
+            existingProduct.Stock = dto.Stock;
+            existingProduct.Image = dto.Image;
+
+            _productRepository.UpdateAsync(existingProduct).Wait();
         }
 
         public void DeleteProduct(int id)

@@ -36,9 +36,18 @@ namespace Application.Services
             return UserResponse.ToDto(_userRepository.AddAsync(UserCreateRequest.ToEntity(dto)).Result);
         }
 
-        public void UpdateUser(int id, UserCreateRequest userDto)
+        public void UpdateUser(int id, UserCreateRequest dto)
         {
-            _userRepository.UpdateAsync(UserCreateRequest.ToEntity(userDto));
+
+            var existingUser = _userRepository.GetByIdAsync(id).Result ?? throw new KeyNotFoundException("No se encontró el usuario");
+
+            existingUser.Name = dto.Name;
+            existingUser.Email = dto.Email;
+            existingUser.Password = dto.Password;
+            existingUser.UserName = dto.UserName;
+            existingUser.UserType = dto.UserType;
+
+            _userRepository.UpdateAsync(existingUser).Wait();
         }
 
         public void DeleteUser(int id)
